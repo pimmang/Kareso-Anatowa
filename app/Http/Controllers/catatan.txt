@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use App\Models\Barang;
+use Filament\Resources\Forms\Components\MultiSelect;
+use Filament\Resources\Forms\Components\TextInput;
+use Filament\Resources\Resource;
+
+class BarangaResource extends Resource
+{
+    public static $model = Barang::class;
+
+    public static function fields()
+    {
+        return [
+            TextInput::make('name')
+                ->label('Nama Barang')
+                ->required(),
+            MultiSelect::make('kategori')
+                ->label('Kategori')
+                ->options(Kategori::pluck('name', 'id'))
+                ->getUsing(fn ($value) => $value->pluck('id'))
+                ->syncUsing(fn ($value) => ['kategori' => $value])
+                ->required(),
+        ];
+    }
+}
